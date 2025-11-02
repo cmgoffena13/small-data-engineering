@@ -1,6 +1,25 @@
+import duckdb
 import polars as pl
+from deltalake import DeltaTable
 
 from src.sources.base import SourceConfig
+
+
+def execute_audit_query(config: SourceConfig) -> None:
+    delta_path = config.delta_table_name
+    audit_query = config.audit_query.format(table=f"delta_scan('{delta_path}')")
+
+    with duckdb.connect() as con:
+        result = con.execute(audit_query).pl()
+
+    failures = []
+
+    for column in result[0]:
+        if column != 1:
+            failures.append(column)
+
+    if len(failures) > 0:
+        raise ValueError(f"Audit query failed for {config.table_name}: {failures}")
 
 
 def create_select_statement(config: SourceConfig) -> str:
@@ -29,3 +48,21 @@ def load_table_from_db(
         connection_uri=config.connection_string,
         schema_overrides=config.schema.to_polars_schema(),
     )
+
+
+def publish_delta(config: SourceConfig) -> None:
+    source_path = f"stage_{config.delta_table_name}"
+    target_path = config.delta_table_name
+
+    predicate_parts = [
+        f"target.{key} = source.{key}" for key in config.table_primary_keys
+    ]
+    predicate = " AND ".join(predicate_parts)
+
+    target_table = DeltaTable(target_path)
+    target_table.merge(
+        source=source_path,
+        predicate=predicate,
+        source_alias="source",
+        target_alias="target",
+    ).when_matched_update_all().when_not_matched_insert_all().execute()

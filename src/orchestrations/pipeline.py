@@ -1,6 +1,6 @@
 from dagster import OpExecutionContext, asset, job, op
 
-from src.db import load_table_from_db
+from src.db import execute_audit_query, load_table_from_db, publish_delta
 from src.sources.base import SourceConfig
 
 
@@ -14,13 +14,13 @@ def write_delta(context: OpExecutionContext) -> None:
 @op(config_schema={"config": SourceConfig})
 def audit_delta(context: OpExecutionContext) -> None:
     config = context.op_config["config"]
-    pass
+    execute_audit_query(config)
 
 
 @op(config_schema={"config": SourceConfig})
 def publish_delta(context: OpExecutionContext) -> None:
     config = context.op_config["config"]
-    pass
+    publish_delta(config)
 
 
 @job

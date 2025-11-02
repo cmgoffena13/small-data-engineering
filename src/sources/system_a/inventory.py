@@ -12,7 +12,11 @@ class Inventory(BaseSchema):
 
 InventoryConfig = SourceConfig(
     table_name="inventory",
-    delta_table_path="bronze/inventory.delta",
+    table_primary_keys=["id"],
+    delta_table_name="bronze/inventory.delta",
     partition_by=["date"],
     schema=Inventory,
+    audit_query="""
+        SELECT CASE WHEN COUNT(DISTINCT id) = COUNT(*) THEN 1 ELSE 0 END 
+        FROM {table}""",
 )

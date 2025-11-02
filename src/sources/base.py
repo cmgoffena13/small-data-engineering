@@ -12,6 +12,7 @@ class BaseSchema(PoldanticBaseModel):
 class SourceConfig(BaseModel):
     connection_string: str
     table_name: str
+    table_primary_keys: list[str]
     delta_table_name: str
     partition_by: Optional[list[str]]
     schema: BaseSchema
