@@ -1,7 +1,9 @@
 import duckdb
 import polars as pl
 from deltalake import DeltaTable
+from deltalake.exceptions import TableNotFoundError
 
+from settings import config
 from src.sources.base import SourceConfig
 
 
@@ -50,8 +52,23 @@ def load_table_from_db(
     )
 
 
-def create_delta_table_if_not_exists(config: SourceConfig) -> None:
-    pass
+def create_delta_table_if_not_exists(
+    schema: str,
+    source_config: SourceConfig,
+    data_warehouse_path: str = config.DATA_WAREHOUSE_URL,
+) -> None:
+    table_uri = f"{data_warehouse_path}/{schema}/{source_config.delta_table_name}"
+    try:
+        DeltaTable(table_uri)
+    except TableNotFoundError:
+        schema = source_config.schema.to_polars_schema()
+        df = pl.DataFrame(schema)
+        arrow_df = df.to_arrow()
+        DeltaTable.create(
+            table_uri,
+            schema=arrow_df.schema.to_arrow_schema(),
+            partition_by=source_config.partition_by,
+        )
 
 
 def publish_delta(config: SourceConfig) -> None:

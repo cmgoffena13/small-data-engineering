@@ -1,7 +1,20 @@
 from dagster import DynamicOut, DynamicOutput, OpExecutionContext, asset, job, op
 
-from src.db import execute_audit_query, load_table_from_db, publish_delta
+from src.db import (
+    create_delta_table_if_not_exists,
+    execute_audit_query,
+    load_table_from_db,
+    publish_delta,
+)
 from src.sources.base import SourceConfig
+
+
+@op(config_schema={"configs": list}, out=DynamicOut(), key_prefix=["bronze"])
+def create_delta_table(context: OpExecutionContext):
+    configs = context.op_config["configs"]
+    for config in configs:
+        create_delta_table_if_not_exists(config.schema, config)
+        yield DynamicOutput(value=config, mapping_key=config.delta_table_name)
 
 
 @asset(config_schema={"configs": list}, out=DynamicOut(), key_prefix=["bronze"])
@@ -27,6 +40,7 @@ def publish_delta(context: OpExecutionContext, config):
 
 @job
 def configurable_write_audit_publish():
-    write_results = write_delta()
+    create_delta_table_results = create_delta_table()
+    write_results = create_delta_table_results.map(write_delta)
     audit_results = write_results.map(audit_delta)
     audit_results.map(publish_delta)
