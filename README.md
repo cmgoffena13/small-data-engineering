@@ -17,7 +17,7 @@
 Mac: `curl -LsSf https://astral.sh/uv/0.6.9/install.sh | sh`  
 Windows: `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/0.6.9/install.ps1 | iex"`
 2. Install the necessary project dependencies using `uv sync`
-3. Install pre-commit: `uv run pre-commit install`
+3. Install pre-commit: `uv run pre-commit install --install-hooks`
 
 ### Optional - Duckdb UI
 1. Install Duckdb CLI  
