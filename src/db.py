@@ -7,7 +7,7 @@ from src.sources.base import SourceConfig
 
 def execute_audit_query(config: SourceConfig) -> None:
     delta_path = config.delta_table_name
-    audit_query = config.audit_query.format(table=f"delta_scan('{delta_path}')")
+    audit_query = config.audit_query.format(table=f"delta_scan(`{delta_path}`)")
 
     with duckdb.connect() as con:
         result = con.execute(audit_query).pl()
@@ -48,6 +48,10 @@ def load_table_from_db(
         connection_uri=config.connection_string,
         schema_overrides=config.schema.to_polars_schema(),
     )
+
+
+def create_delta_table_if_not_exists(config: SourceConfig) -> None:
+    pass
 
 
 def publish_delta(config: SourceConfig) -> None:

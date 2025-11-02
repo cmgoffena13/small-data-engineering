@@ -1,10 +1,10 @@
 from dagster import Definitions, load_assets_from_modules
 from dagster_deltalake_polars import DeltaLakePolarsIOManager
 
+import src.orchestrations
 from settings import config
-from src.assets import __all__ as asset_modules
 
-all_assets = load_assets_from_modules(asset_modules)
+all_assets = load_assets_from_modules(src.orchestrations)
 
 defs = Definitions(
     assets=all_assets,
