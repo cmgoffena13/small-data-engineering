@@ -1,0 +1,18 @@
+from typing import Optional
+
+from poldantic import BaseModel as PoldanticBaseModel
+from poldantic import ConfigDict
+from pydantic import BaseModel
+
+
+class BaseSchema(PoldanticBaseModel):
+    model_config = ConfigDict(validate_by_name=True, validate_by_alias=True)
+
+
+class SourceConfig(BaseModel):
+    connection_string: str
+    table_name: str
+    delta_table_name: str
+    partition_by: Optional[list[str]]
+    schema: BaseSchema
+    audit_query: str
