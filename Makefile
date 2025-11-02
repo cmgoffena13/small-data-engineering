@@ -17,5 +17,5 @@ clean:
 	rm -rf __pycache__ logs .pytest_cache .ruff_cache
 	uv venv --python 3.12
 
-dagster:
+dev:
 	uv run -- dagster dev -m src.definitions
