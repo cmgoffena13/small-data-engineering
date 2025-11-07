@@ -16,4 +16,4 @@ class SourceConfig(BaseModel):
     delta_table_name: str
     partition_by: Optional[list[str]] = None
     schema: BaseSchema
-    audit_query: str
+    audit_query: Optional[str] = None

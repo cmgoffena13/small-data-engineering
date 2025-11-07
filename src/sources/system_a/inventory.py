@@ -17,6 +17,6 @@ InventoryConfig = SourceConfig(
     partition_by=["date"],
     schema=Inventory,
     audit_query="""
-        SELECT CASE WHEN COUNT(DISTINCT id) = COUNT(*) THEN 1 ELSE 0 END 
+        SELECT CASE WHEN COUNT(DISTINCT id) = COUNT(*) THEN 1 ELSE 0 END AS unique_grain
         FROM {table}""",
 )

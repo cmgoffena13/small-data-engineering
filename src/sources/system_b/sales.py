@@ -12,7 +12,11 @@ class Sales(BaseSchema):
 
 SalesConfig = SourceConfig(
     table_name="sales",
+    table_primary_keys=["id"],
     delta_table_path="bronze/sales.delta",
     partition_by=["date"],
     schema=Sales,
+    audit_query="""
+        SELECT CASE WHEN COUNT(DISTINCT id) = COUNT(*) THEN 1 ELSE 0 END AS unique_grain
+        FROM {table}""",
 )
