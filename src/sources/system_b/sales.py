@@ -13,7 +13,7 @@ class Sales(BaseSchema):
 SalesConfig = SourceConfig(
     table_name="sales",
     table_primary_keys=["id"],
-    delta_table_path="bronze/sales.delta",
+    delta_table_name="bronze/sales.delta",
     partition_by=["date"],
     schema=Sales,
     audit_query="""

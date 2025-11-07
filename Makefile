@@ -18,4 +18,5 @@ clean:
 	uv venv --python 3.12
 
 dev:
+	docker compose up -d
 	uv run -- dagster dev -m src.definitions

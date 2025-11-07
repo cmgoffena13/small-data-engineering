@@ -14,6 +14,6 @@ class SourceConfig(BaseModel):
     table_name: str
     table_primary_keys: list[str]
     delta_table_name: str
-    partition_by: Optional[list[str]] = None
     schema: BaseSchema
+    partition_by: Optional[list[str]] = None
     audit_query: Optional[str] = None

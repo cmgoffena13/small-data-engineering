@@ -3,7 +3,7 @@ import polars as pl
 from deltalake import DeltaTable
 from deltalake.exceptions import TableNotFoundError
 
-from settings import config
+from src.settings import config
 from src.sources.base import SourceConfig
 
 
