@@ -19,4 +19,4 @@ clean:
 
 dev:
 	docker compose up -d
-	uv run -- dagster dev -m src.definitions
+	uv run -- dagster dev

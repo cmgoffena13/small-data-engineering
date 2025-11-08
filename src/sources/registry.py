@@ -11,3 +11,6 @@ class SourceRegistry(BaseModel):
 
     def get_sources(self) -> list[SourceConfig]:
         return self.sources
+
+
+ALL_CONFIGS = SourceRegistry()

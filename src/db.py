@@ -8,7 +8,7 @@ from src.sources.base import SourceConfig
 
 
 def execute_audit_query(config: SourceConfig) -> None:
-    delta_path = config.delta_table_name
+    delta_path = f"{config.data_warehouse_path}/bronze/{config.table_name}"
     audit_query = config.audit_query.format(table=f"delta_scan(`{delta_path}`)")
 
     with duckdb.connect() as con:
@@ -25,10 +25,9 @@ def execute_audit_query(config: SourceConfig) -> None:
 
 
 def create_select_statement(config: SourceConfig) -> str:
-    schema = config.schema
     columns = []
 
-    for field_name, field_info in schema.model_fields.items():
+    for field_name, field_info in config.table_schema.model_fields.items():
         alias = field_info.serialization_alias or field_info.alias
 
         if alias and alias != field_name:
@@ -37,7 +36,7 @@ def create_select_statement(config: SourceConfig) -> str:
             columns.append(field_name)
 
     select_clause = ", ".join(columns)
-    return f"SELECT {select_clause} FROM {config.table_name}"
+    return f"SELECT {select_clause} FROM public.{config.table_name}"
 
 
 def load_table_from_db(
@@ -48,20 +47,19 @@ def load_table_from_db(
     return pl.read_database(
         query=query,
         connection_uri=config.connection_string,
-        schema_overrides=config.schema.to_polars_schema(),
+        schema_overrides=config.table_schema.to_polars_schema(),
     )
 
 
 def create_delta_table_if_not_exists(
-    schema: str,
     source_config: SourceConfig,
     data_warehouse_path: str = config.DATA_WAREHOUSE_URL,
 ) -> None:
-    table_uri = f"{data_warehouse_path}/{schema}/{source_config.delta_table_name}"
+    table_uri = f"{data_warehouse_path}/bronze/{source_config.table_name}"
     try:
         DeltaTable(table_uri)
     except TableNotFoundError:
-        schema = source_config.schema.to_polars_schema()
+        schema = source_config.table_schema.to_polars_schema()
         df = pl.DataFrame(schema)
         arrow_df = df.to_arrow()
         DeltaTable.create(
@@ -72,8 +70,8 @@ def create_delta_table_if_not_exists(
 
 
 def publish_delta(config: SourceConfig) -> None:
-    source_path = f"stage_{config.delta_table_name}"
-    target_path = config.delta_table_name
+    source_path = f"{config.data_warehouse_path}/bronze/stage_{config.table_name}"
+    target_path = f"{config.data_warehouse_path}/bronze/{config.table_name}"
 
     predicate_parts = [
         f"target.{key} = source.{key}" for key in config.table_primary_keys

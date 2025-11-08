@@ -1,0 +1,128 @@
+-- Startup script to initialize the inventory and sales tables with test data
+
+-- Drop tables if exists
+DROP TABLE IF EXISTS inventory CASCADE;
+DROP TABLE IF EXISTS sales CASCADE;
+
+-- Create inventory table
+CREATE TABLE inventory (
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    quantity INTEGER NOT NULL,
+    date DATE NOT NULL
+);
+
+-- Insert fake test data for inventory
+INSERT INTO inventory (id, name, quantity, date) VALUES
+(1, 'Widget A', 150, '2024-10-07'),
+(2, 'Widget B', 230, '2024-10-08'),
+(3, 'Gadget X', 85, '2024-10-09'),
+(4, 'Gadget Y', 420, '2024-10-10'),
+(5, 'Tool 1', 67, '2024-10-11'),
+(6, 'Tool 2', 189, '2024-10-12'),
+(7, 'Component Alpha', 312, '2024-10-13'),
+(8, 'Component Beta', 445, '2024-10-14'),
+(9, 'Part Red', 98, '2024-10-15'),
+(10, 'Part Blue', 201, '2024-10-16'),
+(11, 'Widget A', 175, '2024-10-17'),
+(12, 'Widget B', 290, '2024-10-18'),
+(13, 'Gadget X', 120, '2024-10-19'),
+(14, 'Gadget Y', 380, '2024-10-20'),
+(15, 'Tool 1', 95, '2024-10-21'),
+(16, 'Tool 2', 210, '2024-10-22'),
+(17, 'Component Alpha', 275, '2024-10-23'),
+(18, 'Component Beta', 510, '2024-10-24'),
+(19, 'Part Red', 145, '2024-10-25'),
+(20, 'Part Blue', 168, '2024-10-26'),
+(21, 'Widget A', 195, '2024-10-27'),
+(22, 'Widget B', 340, '2024-10-28'),
+(23, 'Gadget X', 78, '2024-10-29'),
+(24, 'Gadget Y', 465, '2024-10-30'),
+(25, 'Tool 1', 112, '2024-10-31'),
+(26, 'Tool 2', 225, '2024-11-01'),
+(27, 'Component Alpha', 298, '2024-11-02'),
+(28, 'Component Beta', 390, '2024-11-03'),
+(29, 'Part Red', 87, '2024-11-04'),
+(30, 'Part Blue', 234, '2024-11-05'),
+(31, 'Widget A', 165, '2024-11-06'),
+(32, 'Widget B', 280, '2024-11-07'),
+(33, 'Gadget X', 102, '2024-11-08'),
+(34, 'Gadget Y', 415, '2024-11-09'),
+(35, 'Tool 1', 73, '2024-11-10'),
+(36, 'Tool 2', 192, '2024-11-11'),
+(37, 'Component Alpha', 325, '2024-11-12'),
+(38, 'Component Beta', 480, '2024-11-13'),
+(39, 'Part Red', 156, '2024-11-14'),
+(40, 'Part Blue', 179, '2024-11-15'),
+(41, 'Widget A', 210, '2024-11-16'),
+(42, 'Widget B', 305, '2024-11-17'),
+(43, 'Gadget X', 91, '2024-11-18'),
+(44, 'Gadget Y', 440, '2024-11-19'),
+(45, 'Tool 1', 128, '2024-11-20'),
+(46, 'Tool 2', 217, '2024-11-21'),
+(47, 'Component Alpha', 287, '2024-11-22'),
+(48, 'Component Beta', 395, '2024-11-23'),
+(49, 'Part Red', 134, '2024-11-24'),
+(50, 'Part Blue', 251, '2024-11-25');
+
+-- Create sales table
+CREATE TABLE sales (
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    quantity INTEGER NOT NULL,
+    date DATE NOT NULL
+);
+
+-- Insert fake test data for sales
+INSERT INTO sales (id, name, quantity, date) VALUES
+(1, 'Product Alpha', 75, '2024-10-07'),
+(2, 'Product Beta', 120, '2024-10-08'),
+(3, 'Product Gamma', 45, '2024-10-09'),
+(4, 'Product Delta', 210, '2024-10-10'),
+(5, 'Product Epsilon', 88, '2024-10-11'),
+(6, 'Product Zeta', 155, '2024-10-12'),
+(7, 'Product Eta', 92, '2024-10-13'),
+(8, 'Product Theta', 178, '2024-10-14'),
+(9, 'Product Iota', 203, '2024-10-15'),
+(10, 'Product Kappa', 134, '2024-10-16'),
+(11, 'Product Alpha', 95, '2024-10-17'),
+(12, 'Product Beta', 145, '2024-10-18'),
+(13, 'Product Gamma', 67, '2024-10-19'),
+(14, 'Product Delta', 225, '2024-10-20'),
+(15, 'Product Epsilon', 112, '2024-10-21'),
+(16, 'Product Zeta', 168, '2024-10-22'),
+(17, 'Product Eta', 105, '2024-10-23'),
+(18, 'Product Theta', 192, '2024-10-24'),
+(19, 'Product Iota', 218, '2024-10-25'),
+(20, 'Product Kappa', 147, '2024-10-26'),
+(21, 'Product Alpha', 82, '2024-10-27'),
+(22, 'Product Beta', 165, '2024-10-28'),
+(23, 'Product Gamma', 58, '2024-10-29'),
+(24, 'Product Delta', 240, '2024-10-30'),
+(25, 'Product Epsilon', 125, '2024-10-31'),
+(26, 'Product Zeta', 180, '2024-11-01'),
+(27, 'Product Eta', 98, '2024-11-02'),
+(28, 'Product Theta', 205, '2024-11-03'),
+(29, 'Product Iota', 232, '2024-11-04'),
+(30, 'Product Kappa', 156, '2024-11-05'),
+(31, 'Product Alpha', 105, '2024-11-06'),
+(32, 'Product Beta', 188, '2024-11-07'),
+(33, 'Product Gamma', 72, '2024-11-08'),
+(34, 'Product Delta', 255, '2024-11-09'),
+(35, 'Product Epsilon', 138, '2024-11-10'),
+(36, 'Product Zeta', 195, '2024-11-11'),
+(37, 'Product Eta', 115, '2024-11-12'),
+(38, 'Product Theta', 220, '2024-11-13'),
+(39, 'Product Iota', 245, '2024-11-14'),
+(40, 'Product Kappa', 172, '2024-11-15'),
+(41, 'Product Alpha', 118, '2024-11-16'),
+(42, 'Product Beta', 198, '2024-11-17'),
+(43, 'Product Gamma', 85, '2024-11-18'),
+(44, 'Product Delta', 268, '2024-11-19'),
+(45, 'Product Epsilon', 152, '2024-11-20'),
+(46, 'Product Zeta', 210, '2024-11-21'),
+(47, 'Product Eta', 128, '2024-11-22'),
+(48, 'Product Theta', 235, '2024-11-23'),
+(49, 'Product Iota', 258, '2024-11-24'),
+(50, 'Product Kappa', 185, '2024-11-25');
+

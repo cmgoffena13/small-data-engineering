@@ -10,6 +10,34 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U smallde"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  init-db:
+    image: postgres:18
+    container_name: small-data-engineering-init-db
+    environment:
+      PGHOST: postgres
+      PGPORT: 5432
+      PGUSER: smallde
+      PGPASSWORD: smallde
+      PGDATABASE: smallde
+    volumes:
+      - ./scripts/init_test_tables.sql:/docker-entrypoint-initdb.d/init_test_tables.sql:ro
+    command: >
+      sh -c "
+        until pg_isready -h postgres -p 5432 -U smallde; do
+          echo 'Waiting for postgres...'
+          sleep 2
+        done
+        psql -h postgres -U smallde -d smallde -f /docker-entrypoint-initdb.d/init_test_tables.sql
+      "
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
   postgres_data:
