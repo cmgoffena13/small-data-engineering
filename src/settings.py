@@ -31,8 +31,6 @@ class ProdConfig(GlobalConfig):
 
 @lru_cache()
 def get_config(env_state: Optional[str]):
-    if env_state is None:
-        env_state = "dev"
     configs = {"dev": DevConfig, "prod": ProdConfig, "test": TestConfig}
     if env_state not in configs:
         raise ValueError(
